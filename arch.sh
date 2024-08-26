@@ -8,6 +8,10 @@ fi
 
 echo "Starting Arch Linux post-install script..."
 
+# Install base-devel, git, and go
+echo "Installing base-devel, git, and go..."
+pacman -Syu --noconfirm --needed base-devel git go
+
 # Automatically detect the non-root username
 NON_ROOT_USER=$(logname)
 
@@ -31,10 +35,11 @@ read -p "Do you want to install Spectacle (screenshot tool)? (y/n): " install_sp
 read -p "Do you want to install Neofetch (system information tool)? (y/n): " install_neofetch
 read -p "Do you want to install Teamspeak3? (y/n): " install_teamspeak3
 read -p "Do you want to install Steam? (y/n): " install_steam
+
 read -p "Do you want to install EasyEffects and related plugins? (y/n): " install_easyeffects
 read -p "Do you want to install 32-bit Pipewire? (y/n): " install_pipewire
-read -p "Do you want to install Dutree (disk usage tree viewer)? (y/n): " install_dutree
-read -p "Do you want to install Timeshift (system backup tool)? (y/n): " install_timeshift
+read -p "Do you want to install dutree? (y/n): " install_dutree
+read -p "Do you want to install Timeshift? (y/n): " install_timeshift
 
 # Function to check user's yes/no response
 function user_choice() {
@@ -66,7 +71,7 @@ if user_choice "$configure_mkinitcpio"; then
     echo "NVIDIA modules are already present in MODULES, skipping mkinitcpio update."
   else
     echo "Adding NVIDIA modules to mkinitcpio.conf"
-    sed -i "/^MODULES=/ s/$(grep -oP '(?<=^MODULES=\()[^\)]*(?=\))')/$NVIDIA_MODULES/" /etc/mkinitcpio.conf
+    sed -i "s/^MODULES=.*$/MODULES=( $(grep -oE 'MODULES=\(([^)]*)\)' /etc/mkinitcpio.conf | sed 's/MODULES=(//' | sed 's/)//' | tr -d ' ' ) $NVIDIA_MODULES )/" /etc/mkinitcpio.conf
     echo "Rebuilding initramfs..."
     mkinitcpio -P
   fi
@@ -77,7 +82,7 @@ fi
 # Enable multicore support for makepkg
 if user_choice "$configure_makepkg"; then
   echo "Configuring multicore support for makepkg..."
-  sed -i 's/#MAKEFLAGS="-j2"/MAKEFLAGS="-j$(($(nproc) - 2))"/' /etc/makepkg.conf
+  sed -i "s/#MAKEFLAGS=\"-j2\"/MAKEFLAGS=\"-j$(($(nproc) - 2))\"/" /etc/makepkg.conf
 else
   echo "Skipping multicore support configuration for makepkg."
 fi
