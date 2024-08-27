@@ -17,11 +17,11 @@ This script provides an interactive menu-driven interface that allows you to:
 
 ## Installation
 
-**Get the script:**:
+**Get the script:**
 wget raw.githubusercontent.com/fjallefar/arch/main/arch.sh
 
-**Make it executeable:**:
+**Make it executeable:**
 chmod+x arch.sh
 
-**Run the script:**:
+**Run the script:**
 run: ./arch.sh
