@@ -50,8 +50,8 @@ Select applications to install from categorized menus (Browsers, Common Programs
 
 **Patience Required:** 
 
-Some programs, especially those that require makepkg for installation (e.g., LyX), may take a while to install. Be patient.
-Root Password for LyX: LyX may prompt for the root password during installation.
+Some programs, especially those that require makepkg for installation, may take a while to install. Be patient.
+LyX may prompt for the root password during installation.
 
 
 **Script Origins:** 
